@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swiss Flag Component</title>
+
+  <script type="module" src="./swiss-flag.js"></script>
+  <style>
+    :root {
+      --border: #e5e7eb;
+      --text: #374151;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      color: var(--text);
+    }
+
+    #app {
+      max-inline-size: 600px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .controls-container {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      margin-bottom: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .primary-toggles {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .size-control {
+      margin-bottom: 0.5rem;
+    }
+
+    .size-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .size-value {
+      color: #666;
+    }
+
+    input[type="range"] {
+      inline-size: 100%;
+      display: block;
+    }
+
+    .manual-settings-section {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 1.5rem;
+    }
+
+    .manual-controls {
+      display: grid;
+      gap: 1rem;
+      padding-inline-start: 0.5rem;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .manual-label-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.25rem;
+      font-size: 0.85rem;
+    }
+
+    .manual-value {
+      color: #666;
+    }
+
+    .preset-message {
+      color: #666;
+      font-size: 0.9rem;
+      font-style: italic;
+      padding-inline-start: 1.8rem;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .credits {
+      visibility: hidden;
+      position: absolute;
+
+      bottom: 0;
+      left: 50%;
+      inline-size: 95%;
+      margin: 0;
+      padding: 8px 16px;
+      transform: translateX(-50%) translateY(50%);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 2px 8px var(--border);
+      color: var(--text);
+      font-size: 0.9rem;
+      text-align: center;
+      opacity: 0;
+      transition:
+        opacity 0.2s ease-in-out,
+        visibility 0.2s;
+
+      z-index: 100;
+    }
+
+    swiss-flag:hover .credits,
+    .credits:hover {
+      visibility: visible;
+      opacity: 1;
+      transition-delay: 0s;
+    }
+
+    .flag-container {
+      margin-inline: auto;
+      position: relative;
+      anchor-name: --flag;
+      display: block;
+    }
+
+    swiss-flag {
+      display: block;
+      inline-size: 100%;
+      block-size: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <h1>Swiss Flag - Web Component</h1>
+
+    <div class="controls-container">
+      <div class="primary-toggles">
+        <label>
+          <input type="checkbox" id="reduce-motion">
+          Reduce Motion
+        </label>
+        <label>
+          <input type="checkbox" id="no-animation">
+          No Animation
+        </label>
+        <label>
+          <input type="checkbox" id="show-slot" checked>
+          Show Slot Content
+        </label>
+      </div>
+
+      <div class="size-control">
+        <div class="size-header">
+          Size <span id="size-display" class="size-value">12rem</span>
+        </div>
+        <input type="range" id="size-slider" min="2" max="50" value="12">
+      </div>
+
+      <div class="manual-settings-section">
+        <label style="margin-bottom: 1rem; font-weight: 500;">
+          <input type="checkbox" id="override-animation">
+          Override Animation Settings
+        </label>
+
+        <div id="manual-controls" class="manual-controls" style="display: none;">
+          <div>
+            <div class="manual-label-header">
+              Animation Speed <span id="speed-display" class="manual-value">600ms</span>
+            </div>
+            <input type="range" id="speed-slider" min="100" max="3000" step="50" value="600">
+          </div>
+
+          <div>
+            <div class="manual-label-header">
+              Oscillation Distance <span id="distance-display" class="manual-value">2%</span>
+            </div>
+            <input type="range" id="distance-slider" min="0" max="10" step="0.1" value="2">
+          </div>
+
+          <div>
+            <div class="manual-label-header">
+              Stagger Delay <span id="stagger-display" class="manual-value">50ms</span>
+            </div>
+            <input type="range" id="stagger-slider" min="0" max="200" step="5" value="50">
+          </div>
+        </div>
+
+        <div id="preset-message" class="preset-message">
+          Using "Standard" preset (600ms speed, 2% distance, 50ms stagger)
+        </div>
+      </div>
+    </div>
+
+    <div class="flag-container" style="inline-size: 12rem;">
+      <swiss-flag>
+        <div class="credits">
+          🇨🇭 Swiss <a href="https://www.swissengineering.ch" target="_blank" rel="noopener noreferrer">Engineering</a>
+        </div>
+      </swiss-flag>
+    </div>
+
+    <div style="text-align: center; margin-top: 4rem; font-size: 0.9rem; color: #666;">
+      <a href="https://github.com/Khoding/swiss-flag" target="_blank"
+        style="color: inherit; text-decoration: none; border-bottom: 1px solid #ccc;">
+        View on GitHub and use the Swiss Flag Web Component in your projects!
+      </a>
+    </div>
+  </div>
+
+
+  <script>
+    const state = {
+      reduceAnimation: false,
+      removeAnimation: false,
+      showSlot: true,
+      size: 12,
+      overrideAnimation: false,
+      speed: 600,
+      distance: 2,
+      stagger: 50
+    };
+
+    const reduceMotionCheckbox = document.getElementById('reduce-motion');
+    const noAnimationCheckbox = document.getElementById('no-animation');
+    const showSlotCheckbox = document.getElementById('show-slot');
+    const sizeSlider = document.getElementById('size-slider');
+    const sizeDisplay = document.getElementById('size-display');
+    const overrideCheckbox = document.getElementById('override-animation');
+    const manualControls = document.getElementById('manual-controls');
+    const presetMessage = document.getElementById('preset-message');
+    const speedSlider = document.getElementById('speed-slider');
+    const speedDisplay = document.getElementById('speed-display');
+    const distanceSlider = document.getElementById('distance-slider');
+    const distanceDisplay = document.getElementById('distance-display');
+    const staggerSlider = document.getElementById('stagger-slider');
+    const staggerDisplay = document.getElementById('stagger-display');
+    const flagContainer = document.querySelector('.flag-container');
+    const swissFlag = document.querySelector('swiss-flag');
+    const credits = document.querySelector('.credits');
+
+    function updateUI() {
+      if (state.reduceAnimation) {
+        swissFlag.setAttribute('reduce-animation', '');
+      } else {
+        swissFlag.removeAttribute('reduce-animation');
+      }
+
+      if (state.removeAnimation) {
+        swissFlag.setAttribute('remove-animation', '');
+      } else {
+        swissFlag.removeAttribute('remove-animation');
+      }
+
+      if (state.overrideAnimation) {
+        swissFlag.setAttribute('animation-speed', state.speed);
+        swissFlag.setAttribute('oscillate-distance', state.distance + '%');
+        swissFlag.setAttribute('staggered-delay', state.stagger);
+        manualControls.style.display = 'grid';
+        presetMessage.style.display = 'none';
+      } else {
+        swissFlag.removeAttribute('animation-speed');
+        swissFlag.removeAttribute('oscillate-distance');
+        swissFlag.removeAttribute('staggered-delay');
+        manualControls.style.display = 'none';
+        presetMessage.style.display = 'block';
+
+        presetMessage.textContent = state.reduceAnimation
+          ? 'Using "Reduced Motion" preset (900ms speed, 3% distance, 35ms stagger)'
+          : 'Using "Standard" preset (600ms speed, 2% distance, 50ms stagger)';
+      }
+
+      flagContainer.style.inlineSize = `${state.size}rem`;
+      sizeDisplay.textContent = `${state.size}rem`;
+
+      speedDisplay.textContent = `${state.speed}ms`;
+      distanceDisplay.textContent = `${state.distance}%`;
+      staggerDisplay.textContent = `${state.stagger}ms`;
+
+      if (state.showSlot) {
+        credits.style.display = 'block';
+      } else {
+        credits.style.display = 'none';
+      }
+    }
+
+    reduceMotionCheckbox.addEventListener('change', (e) => {
+      const isChecked = e.target.checked;
+      const wasRemoved = state.removeAnimation;
+      state.removeAnimation = true;
+      state.reduceAnimation = isChecked;
+      updateUI();
+
+      setTimeout(() => {
+        state.removeAnimation = wasRemoved;
+        updateUI();
+      }, 10);
+    });
+
+    noAnimationCheckbox.addEventListener('change', (e) => {
+      state.removeAnimation = e.target.checked;
+      updateUI();
+    });
+
+    showSlotCheckbox.addEventListener('change', (e) => {
+      state.showSlot = e.target.checked;
+      updateUI();
+    });
+
+    sizeSlider.addEventListener('input', (e) => {
+      state.size = e.target.value;
+      updateUI();
+    });
+
+    overrideCheckbox.addEventListener('change', (e) => {
+      state.overrideAnimation = e.target.checked;
+      updateUI();
+    });
+
+    speedSlider.addEventListener('input', (e) => {
+      state.speed = Number(e.target.value);
+      updateUI();
+    });
+
+    distanceSlider.addEventListener('input', (e) => {
+      state.distance = Number(e.target.value);
+      updateUI();
+    });
+
+    staggerSlider.addEventListener('input', (e) => {
+      state.stagger = Number(e.target.value);
+      updateUI();
+    });
+
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mediaQuery.matches) {
+      // updateUI will handle this if we set defaults or if we read it here
+      // For now, let's just respect the manual toggles starting at false/false
+    }
+
+    updateUI();
+  </script>
+</body>
+
+</html>
