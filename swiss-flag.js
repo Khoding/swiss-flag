@@ -203,7 +203,7 @@ export class SwissFlag extends HTMLElement {
       }
     `;
 
-    this.shadowRoot.innerHTML = `<style>${css.replace(/\s+/g, ' ')}</style><section class="flag${this.effectiveReduceAnimation ? ' reduced-motion' : ''}${this.removeAnimation ? ' no-animation' : ''}">${columnsHtml}<slot></slot></section>`;
+    this.shadowRoot.innerHTML = `<style>${css.replace(/\s+/g, ' ')}</style><section class="flag${this.effectiveReduceAnimation ? ' reduced-motion' : ''}${this.removeAnimation ? ' no-animation' : ''}">${columnsHtml}</section><slot></slot>`;
   }
 }
 

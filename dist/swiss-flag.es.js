@@ -121,7 +121,7 @@ class b extends HTMLElement {
         to { transform: translateY(calc(-1 * var(--oscillate-distance))); }
       }
     `;
-    this.shadowRoot.innerHTML = `<style>${s.replace(/\s+/g, " ")}</style><section class="flag${this.effectiveReduceAnimation ? " reduced-motion" : ""}${this.removeAnimation ? " no-animation" : ""}">${a}<slot></slot></section>`;
+    this.shadowRoot.innerHTML = `<style>${s.replace(/\s+/g, " ")}</style><section class="flag${this.effectiveReduceAnimation ? " reduced-motion" : ""}${this.removeAnimation ? " no-animation" : ""}">${a}</section><slot></slot>`;
   }
 }
 customElements.define("swiss-flag", b);

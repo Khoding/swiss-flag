@@ -26,4 +26,4 @@
         from { transform: translateY(var(--oscillate-distance)); }
         to { transform: translateY(calc(-1 * var(--oscillate-distance))); }
       }
-    `;this.shadowRoot.innerHTML=`<style>${a.replace(/\s+/g," ")}</style><section class="flag${this.effectiveReduceAnimation?" reduced-motion":""}${this.removeAnimation?" no-animation":""}">${s}<slot></slot></section>`}}customElements.define("swiss-flag",l),o.SwissFlag=l,Object.defineProperty(o,Symbol.toStringTag,{value:"Module"})}));
+    `;this.shadowRoot.innerHTML=`<style>${a.replace(/\s+/g," ")}</style><section class="flag${this.effectiveReduceAnimation?" reduced-motion":""}${this.removeAnimation?" no-animation":""}">${s}</section><slot></slot>`}}customElements.define("swiss-flag",l),o.SwissFlag=l,Object.defineProperty(o,Symbol.toStringTag,{value:"Module"})}));
