@@ -26,4 +26,4 @@
         from { transform: translateY(var(--oscillate-distance)); }
         to { transform: translateY(calc(-1 * var(--oscillate-distance))); }
       }
-    `;this.shadowRoot.innerHTML=`<style>${i.replace(/\s+/g," ")}</style><section class="flag${this.effectiveReduceAnimation?" reduced-motion":""}${this.removeAnimation?" no-animation":""}">${e}<slot></slot></section>`}}customElements.define("swiss-flag",S);
+    `;this.shadowRoot.innerHTML=`<style>${i.replace(/\s+/g," ")}</style><section class="flag${this.effectiveReduceAnimation?" reduced-motion":""}${this.removeAnimation?" no-animation":""}">${e}</section><slot></slot>`}}customElements.define("swiss-flag",S);
