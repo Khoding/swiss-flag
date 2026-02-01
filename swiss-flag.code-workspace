@@ -12,6 +12,18 @@
         "type": "shell",
         "command": "npm version patch && git push --follow-tags",
         "problemMatcher": []
+      },
+      {
+        "label": "Release Minor",
+        "type": "shell",
+        "command": "npm version minor && git push --follow-tags",
+        "problemMatcher": []
+      },
+      {
+        "label": "Release Major",
+        "type": "shell",
+        "command": "npm version major && git push --follow-tags",
+        "problemMatcher": []
       }
     ]
   }
