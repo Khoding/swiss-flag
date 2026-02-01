@@ -1,7 +1,7 @@
 {
   "name": "@khoding/swiss-flag",
   "type": "module",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "A native Web Component for the Swiss Flag, with customizable animations.",
   "main": "./dist/swiss-flag.umd.js",
   "module": "./dist/swiss-flag.es.js",
@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite -c vite.config.demo.js",
     "build": "vite build",
     "build:demo": "vite build -c vite.config.demo.js",
     "deploy": "vite build -c vite.config.demo.js && gh-pages -d dist-demo",
@@ -27,6 +27,10 @@
   "license": "MIT",
   "devDependencies": {
     "gh-pages": "^6.3.0",
+    "lightningcss": "^1.31.1",
     "vite": "^7.3.1"
-  }
+  },
+  "browserslist": [
+    "defaults"
+  ]
 }

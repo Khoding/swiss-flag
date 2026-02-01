@@ -1,3 +1,5 @@
+import styles from './swiss-flag.css?inline';
+
 export class SwissFlag extends HTMLElement {
   constructor() {
     super();
@@ -152,6 +154,15 @@ export class SwissFlag extends HTMLElement {
   }
 
   render() {
+    this.style.setProperty(
+      '--oscillate-distance',
+      this.activeOscillateDistance
+    );
+    this.style.setProperty(
+      '--animation-speed',
+      `${this.activeAnimationSpeed}ms`
+    );
+
     const structures = this.columnStructures;
     const staggered = this.activeStaggeredDelay;
     const size = this.gridSize;
@@ -173,37 +184,9 @@ export class SwissFlag extends HTMLElement {
       })
       .join('');
 
-    const css = `
-      :host {
-        display: block;
-        position: relative;
-        --oscillate-distance: ${this.activeOscillateDistance};
-        --animation-speed: ${this.activeAnimationSpeed}ms;
-      }
-      .flag {
-        display: flex;
-        width: 100%;
-        height: 100%;
-        aspect-ratio: 1 / 1;
-        isolation: isolate;
-        color-scheme: only light;
-        forced-color-adjust: none;
-      }
-      .flag.no-animation .column {
-        animation: none;
-      }
-      .column {
-        flex: 1;
-        animation: oscillate var(--animation-speed) infinite alternate ease-in-out backwards;
-        filter: none !important;
-      }
-      @keyframes oscillate {
-        from { transform: translateY(var(--oscillate-distance)); }
-        to { transform: translateY(calc(-1 * var(--oscillate-distance))); }
-      }
-    `;
-
-    this.shadowRoot.innerHTML = `<style>${css.replace(/\s+/g, ' ')}</style><section class="flag${this.effectiveReduceAnimation ? ' reduced-motion' : ''}${this.removeAnimation ? ' no-animation' : ''}">${columnsHtml}</section><slot></slot>`;
+    this.shadowRoot.innerHTML = `<style>${styles}</style><section class="flag${
+      this.effectiveReduceAnimation ? ' reduced-motion' : ''
+    }${this.removeAnimation ? ' no-animation' : ''}">${columnsHtml}</section><slot></slot>`;
   }
 }
 

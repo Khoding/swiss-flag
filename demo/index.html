@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Swiss Flag Component</title>
 
-  <script type="module" src="./swiss-flag.js"></script>
+  <script type="module" src="../src/swiss-flag.js"></script>
   <style>
     :root {
       --border: #e5e7eb;
@@ -155,17 +155,48 @@
       transition-delay: 0s;
     }
 
-    .flag-container {
-      margin-inline: auto;
-      position: relative;
-      anchor-name: --flag;
-      display: block;
-    }
-
     swiss-flag {
       display: block;
       inline-size: 100%;
       block-size: 100%;
+      margin-inline: auto;
+    }
+
+    .code-sample-container {
+      background: #2d2d2d;
+      color: #e0e0e0;
+      padding: 1.5rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: Consolas, Monaco, 'Andale Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-top: 2rem;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+
+    .code-sample-container pre {
+      margin: 0;
+    }
+
+    .token-tag {
+      color: #569cd6;
+    }
+
+    .token-attr-name {
+      color: #9cdcfe;
+    }
+
+    .token-attr-value {
+      color: #ce9178;
+    }
+
+    .token-punctuation {
+      color: #808080;
+    }
+
+    .token-text {
+      color: #d4d4d4;
     }
   </style>
 </head>
@@ -232,12 +263,15 @@
       </div>
     </div>
 
-    <div class="flag-container" style="inline-size: 12rem;">
-      <swiss-flag>
-        <div class="credits">
-          🇨🇭 Swiss <a href="https://www.swissengineering.ch" target="_blank" rel="noopener noreferrer">Engineering</a>
-        </div>
-      </swiss-flag>
+    <swiss-flag style="inline-size: 12rem;">
+      <div class="credits">
+        🇨🇭 Swiss <a href="https://www.swissengineering.ch" target="_blank" rel="noopener noreferrer">Engineering</a>
+      </div>
+    </swiss-flag>
+
+    <h3 style="margin-top: 3rem; text-align: center;">Code Sample</h3>
+    <div class="code-sample-container">
+      <pre><code id="code-sample"></code></pre>
     </div>
 
     <div style="text-align: center; margin-top: 4rem; font-size: 0.9rem; color: #666;">
@@ -275,9 +309,55 @@
     const distanceDisplay = document.getElementById('distance-display');
     const staggerSlider = document.getElementById('stagger-slider');
     const staggerDisplay = document.getElementById('stagger-display');
-    const flagContainer = document.querySelector('.flag-container');
     const swissFlag = document.querySelector('swiss-flag');
     const credits = document.querySelector('.credits');
+    const codeSample = document.getElementById('code-sample');
+
+    function highlightAttr(name, value) {
+      if (value === undefined) {
+        return `<span class="token-attr-name">${name}</span>`;
+      }
+      return `<span class="token-attr-name">${name}</span><span class="token-punctuation">=</span><span class="token-attr-value">"${value}"</span>`;
+    }
+
+    function updateCodeSample() {
+      const attributes = [];
+      attributes.push(highlightAttr('style', `inline-size: ${state.size}rem;`));
+
+      if (state.reduceAnimation) attributes.push(highlightAttr('reduce-animation'));
+      if (state.removeAnimation) attributes.push(highlightAttr('remove-animation'));
+
+      if (state.overrideAnimation) {
+        attributes.push(highlightAttr('animation-speed', state.speed));
+        attributes.push(highlightAttr('oscillate-distance', `${state.distance}%`));
+        attributes.push(highlightAttr('staggered-delay', state.stagger));
+      }
+
+      const attrString = attributes.length > 0 ? ' ' + attributes.join('\n  ') : '';
+
+      const swissFlagOpen = `<span class="token-punctuation">&lt;</span><span class="token-tag">swiss-flag</span>${attrString}<span class="token-punctuation">&gt;</span>`;
+      const swissFlagClose = `<span class="token-punctuation">&lt;/</span><span class="token-tag">swiss-flag</span><span class="token-punctuation">&gt;</span>`;
+
+      const divAttr = highlightAttr('class', 'credits');
+      const divOpen = `<span class="token-punctuation">&lt;</span><span class="token-tag">div</span> ${divAttr}<span class="token-punctuation">&gt;</span>`;
+      const divClose = `<span class="token-punctuation">&lt;/</span><span class="token-tag">div</span><span class="token-punctuation">&gt;</span>`;
+
+      const aAttrs = [
+        highlightAttr('href', 'https://www.swissengineering.ch'),
+        highlightAttr('target', '_blank'),
+        highlightAttr('rel', 'noopener noreferrer')
+      ].join(' ');
+      const aOpen = `<span class="token-punctuation">&lt;</span><span class="token-tag">a</span> ${aAttrs}<span class="token-punctuation">&gt;</span>`;
+      const aClose = `<span class="token-punctuation">&lt;/</span><span class="token-tag">a</span><span class="token-punctuation">&gt;</span>`;
+
+      // Content
+      let flagText = '';
+      if (state.showSlot) {
+        flagText = '\n  ' + divOpen + '\n    🇨🇭 Swiss ' + aOpen + 'Engineering' + aClose + '\n  ' + divClose + '\n';
+      }
+
+      codeSample.innerHTML = swissFlagOpen + flagText + swissFlagClose;
+    }
 
     function updateUI() {
       if (state.reduceAnimation) {
@@ -310,7 +390,7 @@
           : 'Using "Standard" preset (600ms speed, 2% distance, 50ms stagger)';
       }
 
-      flagContainer.style.inlineSize = `${state.size}rem`;
+      swissFlag.style.inlineSize = `${state.size}rem`;
       sizeDisplay.textContent = `${state.size}rem`;
 
       speedDisplay.textContent = `${state.speed}ms`;
@@ -318,10 +398,17 @@
       staggerDisplay.textContent = `${state.stagger}ms`;
 
       if (state.showSlot) {
-        credits.style.display = 'block';
+        if (!swissFlag.contains(credits)) {
+          swissFlag.appendChild(credits);
+        }
+        credits.style.display = '';
       } else {
-        credits.style.display = 'none';
+        if (swissFlag.contains(credits)) {
+          credits.remove();
+        }
       }
+
+      updateCodeSample();
     }
 
     reduceMotionCheckbox.addEventListener('change', (e) => {
@@ -354,6 +441,17 @@
 
     overrideCheckbox.addEventListener('change', (e) => {
       state.overrideAnimation = e.target.checked;
+
+      if (state.overrideAnimation && state.reduceAnimation) {
+        state.speed = 900;
+        state.distance = 3;
+        state.stagger = 35;
+
+        speedSlider.value = state.speed;
+        distanceSlider.value = state.distance;
+        staggerSlider.value = state.stagger;
+      }
+
       updateUI();
     });
 

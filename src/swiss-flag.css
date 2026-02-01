@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  position: relative;
+}
+
+.flag {
+  display: flex;
+  aspect-ratio: 1 / 1;
+  isolation: isolate;
+  color-scheme: only light;
+  forced-color-adjust: none;
+}
+
+.flag.no-animation .column {
+  animation: none;
+}
+
+.column {
+  flex: 1;
+  animation: oscillate var(--animation-speed) infinite alternate ease-in-out
+    backwards;
+  filter: none !important;
+}
+
+@keyframes oscillate {
+  from {
+    transform: translateY(var(--oscillate-distance));
+  }
+  to {
+    transform: translateY(calc(-1 * var(--oscillate-distance)));
+  }
+}
