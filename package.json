@@ -14,6 +14,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:demo": "vite build -c vite.config.demo.js",
+    "deploy": "vite build -c vite.config.demo.js && gh-pages -d dist-demo",
     "preview": "vite preview"
   },
   "keywords": [
@@ -24,6 +26,7 @@
   "author": "Julien",
   "license": "MIT",
   "devDependencies": {
+    "gh-pages": "^6.3.0",
     "vite": "^5.0.12"
   }
 }
