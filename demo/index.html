@@ -216,7 +216,7 @@
           No Animation
         </label>
         <label>
-          <input type="checkbox" id="show-slot" checked>
+          <input type="checkbox" id="show-slot">
           Show Slot Content
         </label>
       </div>
@@ -265,7 +265,7 @@
 
     <swiss-flag style="inline-size: 12rem;">
       <div class="credits">
-        🇨🇭 Swiss <a href="https://www.swissengineering.ch" target="_blank" rel="noopener noreferrer">Engineering</a>
+        🇨🇭 Swiss <a href="#">Engineering</a>
       </div>
     </swiss-flag>
 
@@ -287,7 +287,7 @@
     const state = {
       reduceAnimation: false,
       removeAnimation: false,
-      showSlot: true,
+      showSlot: false,
       size: 12,
       overrideAnimation: false,
       speed: 600,
@@ -343,9 +343,7 @@
       const divClose = `<span class="token-punctuation">&lt;/</span><span class="token-tag">div</span><span class="token-punctuation">&gt;</span>`;
 
       const aAttrs = [
-        highlightAttr('href', 'https://www.swissengineering.ch'),
-        highlightAttr('target', '_blank'),
-        highlightAttr('rel', 'noopener noreferrer')
+        highlightAttr('href', '#'),
       ].join(' ');
       const aOpen = `<span class="token-punctuation">&lt;</span><span class="token-tag">a</span> ${aAttrs}<span class="token-punctuation">&gt;</span>`;
       const aClose = `<span class="token-punctuation">&lt;/</span><span class="token-tag">a</span><span class="token-punctuation">&gt;</span>`;
