@@ -62,7 +62,8 @@ import '@khoding/swiss-flag';
 
 ## Slots
 
-The component exposes a default slot. Content placed in this slot is rendered inside the main flag container. Since the container uses `display: flex` to render the flag columns, you will typically want to use `position: absolute` for any content injected via the slot to place it on top of the flag without disrupting the grid.
+The component exposes a default slot. Content placed in this slot is rendered outside of the `section.flag` in the shadow-dom.  
+The component is designed to let you do whatever you want and doesn't assume anything, so explore the code and you'll be able to do whatever you want!
 
 ```html
 <swiss-flag>
