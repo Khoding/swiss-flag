@@ -2,12 +2,17 @@
   "folders": [
     {
       "path": "."
-    },
-    {
-      "path": "../swiss-flag-vue"
     }
   ],
-  "settings": {
-    "liveServer.settings.multiRootWorkspaceName": "swiss-flag"
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Release Patch",
+        "type": "shell",
+        "command": "npm version patch && git push --follow-tags",
+        "problemMatcher": []
+      }
+    ]
   }
 }
