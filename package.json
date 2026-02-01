@@ -1,7 +1,7 @@
 {
   "name": "@khoding/swiss-flag",
   "type": "module",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A native Web Component for the Swiss Flag, with customizable animations.",
   "main": "./dist/swiss-flag.umd.js",
   "module": "./dist/swiss-flag.es.js",
