@@ -6,10 +6,10 @@ You can see a demo of the component [here](https://swiss-flag.khodok.com).
 
 ## Installation
 
-You can install the package via npm: (check the tags on GitHub for the latest version)
+You can install the package via npm: (check the [GitHub Tags](https://github.com/Khoding/swiss-flag/tags) for the latest version)
 
 ```bash
-npm install github:Khoding/swiss-flag#semver:^0.1.0
+npm install github:Khoding/swiss-flag#semver:^1.0.0
 ```
 
 ## Usage
