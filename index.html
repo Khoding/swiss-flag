@@ -75,9 +75,6 @@
     </div>
 
     <swiss-flag style="inline-size: 12rem;">
-      <div class="credits">
-        🇨🇭 Swiss <a href="#">Engineering</a>
-      </div>
     </swiss-flag>
 
     <h3 style="margin-block-start: 3rem; text-align: center;">Code Sample</h3>
@@ -121,7 +118,9 @@
     const staggerSlider = document.getElementById('stagger-slider');
     const staggerDisplay = document.getElementById('stagger-display');
     const swissFlag = document.querySelector('swiss-flag');
-    const credits = document.querySelector('.credits');
+    const credits = document.createElement('div');
+    credits.className = 'credits';
+    credits.innerHTML = '🇨🇭 Swiss <a href="#">Engineering</a>';
     const codeSample = document.getElementById('code-sample');
 
     function highlightAttr(name, value) {
