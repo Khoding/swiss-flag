@@ -33,6 +33,7 @@ export class SwissFlag extends HTMLElement {
   get reduceAnimation() {
     return this.hasAttribute('reduce-animation');
   }
+
   get removeAnimation() {
     return this.hasAttribute('remove-animation');
   }
@@ -74,7 +75,7 @@ export class SwissFlag extends HTMLElement {
 
   get activeOscillateDistance() {
     if (this.oscillateDistance !== undefined) return this.oscillateDistance;
-    return !this.effectiveReduceAnimation ? '2%' : '3%';
+    return '2%';
   }
 
   get columnStructures() {
@@ -104,6 +105,7 @@ export class SwissFlag extends HTMLElement {
     const getColumnWeight = columnIndex => {
       if (size === 32) return 1;
       if (size === 5) return columnIndex === 1 || columnIndex === 3 ? 7 : 6;
+
       const sectionIndex = Math.floor(columnIndex / 3);
       return sectionIndex === 1 || sectionIndex === 3 ? 7 / 3 : 2;
     };

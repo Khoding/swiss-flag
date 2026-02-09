@@ -90,7 +90,7 @@
       display: grid;
       gap: 1rem;
       padding-inline-start: 0.5rem;
-      animation: fadeIn 0.2s ease-out;
+      transition: opacity 0.2s;
     }
 
     .manual-label-header {
@@ -109,6 +109,7 @@
       font-size: 0.9rem;
       font-style: italic;
       padding-inline-start: 1.8rem;
+      margin-block-end: 1rem;
     }
 
     @keyframes fadeIn {
@@ -171,7 +172,6 @@
       font-family: Consolas, Monaco, 'Andale Mono', monospace;
       font-size: 0.9rem;
       line-height: 1.5;
-      margin-block-start: 2rem;
       box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
     }
 
@@ -197,6 +197,29 @@
 
     .token-text {
       color: #d4d4d4;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .github-repo {
+      text-align: center;
+      margin-block-start: 2rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    h3 {
+      margin-block-start: 3rem;
+      text-align: center;
+    }
+
+    .flag-description {
+      font-style: italic;
+      color: #555;
     }
   </style>
 </head>
@@ -234,7 +257,11 @@
           Override Animation Settings
         </label>
 
-        <div id="manual-controls" class="manual-controls" style="display: none;">
+        <div id="preset-message" class="preset-message">
+          Using "Standard" preset (600ms speed, 2% distance, 50ms stagger)
+        </div>
+
+        <div id="manual-controls" class="manual-controls">
           <div>
             <div class="manual-label-header">
               Animation Speed <span id="speed-display" class="manual-value">600ms</span>
@@ -256,29 +283,53 @@
             <input type="range" id="stagger-slider" min="0" max="200" step="5" value="50">
           </div>
         </div>
-
-        <div id="preset-message" class="preset-message">
-          Using "Standard" preset (600ms speed, 2% distance, 50ms stagger)
-        </div>
       </div>
     </div>
 
     <swiss-flag style="inline-size: 12rem;">
     </swiss-flag>
 
-    <h3 style="margin-block-start: 3rem; text-align: center;">Code Sample</h3>
+    <h3>Code Sample</h3>
     <div class="code-sample-container">
       <pre><code id="code-sample"></code></pre>
     </div>
 
-    <div style="text-align: center; margin-block-start: 2rem; font-size: 0.9rem; color: #666;">
-      <a href="https://github.com/Khoding/swiss-flag" target="_blank"
-        style="color: inherit; text-decoration: none; border-bottom: 1px solid #ccc;">
+    <div class="github-repo">
+      <a href="https://github.com/Khoding/swiss-flag" target="_blank">
         View on GitHub and use the Swiss Flag Web Component in your projects!
       </a>
     </div>
-  </div>
 
+    <div class="explanation">
+      <h3>Additional stuff</h3>
+      <p>
+        The Swiss Flag component follows closely the design of the official Swiss flag. It is defined as such: <span
+          class="flag-description">
+          "a
+          white, upright, free-standing cross depicted against a red background, whose arms, which are all of equal
+          size,
+          are one-sixth longer than they are wide."
+        </span>
+      </p>
+      <p>
+        The official color of the flag is <a href="https://www.pantone.com/color-finder/485-C">Pantone 485C</a>, a color
+        that cannot properly be depicted on most screens (except
+        <em>maybe</em>
+        Pantone Validated ones, but they are not common). For this reason, it has been determined in 2007 that the
+        official "digital" red for the Swiss Flag be <code>#FF0000</code>, the color used for this component.
+      </p>
+
+      <ul>
+        <li>
+          <a href="https://en.wikipedia.org/wiki/Flag_of_Switzerland" target="_blank">Flag of Switzerland on
+            Wikipedia</a>
+        </li>
+        <li>
+          <a href="https://www.aboutswitzerland.eda.admin.ch/en/swiss-flag" target="_blank">Swiss Flag on admin.ch</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 
   <script>
     const state = {
@@ -373,17 +424,13 @@
         swissFlag.setAttribute('animation-speed', state.speed);
         swissFlag.setAttribute('oscillate-distance', state.distance + '%');
         swissFlag.setAttribute('staggered-delay', state.stagger);
-        manualControls.style.display = 'grid';
-        presetMessage.style.display = 'none';
       } else {
         swissFlag.removeAttribute('animation-speed');
         swissFlag.removeAttribute('oscillate-distance');
         swissFlag.removeAttribute('staggered-delay');
-        manualControls.style.display = 'none';
-        presetMessage.style.display = 'block';
 
         presetMessage.textContent = state.reduceAnimation
-          ? 'Using "Reduced Motion" preset (900ms speed, 3% distance, 35ms stagger)'
+          ? 'Using "Reduced Motion" preset (900ms speed, 2% distance, 35ms stagger)'
           : 'Using "Standard" preset (600ms speed, 2% distance, 50ms stagger)';
       }
 
@@ -441,7 +488,7 @@
 
       if (state.overrideAnimation && state.reduceAnimation) {
         state.speed = 900;
-        state.distance = 3;
+        state.distance = 2;
         state.stagger = 35;
 
         speedSlider.value = state.speed;

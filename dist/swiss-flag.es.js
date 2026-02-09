@@ -1,4 +1,4 @@
-const b = ":host{display:block;position:relative}.flag{aspect-ratio:1;isolation:isolate;--lightningcss-light:initial;--lightningcss-dark: ;--lightningcss-light:initial;--lightningcss-dark: ;color-scheme:light only;forced-color-adjust:none;display:flex}.flag.no-animation .column{animation:none}.column{animation:oscillate var(--animation-speed) infinite alternate ease-in-out backwards;flex:1;filter:none!important}@keyframes oscillate{0%{transform:translateY(var(--oscillate-distance))}to{transform:translateY(calc(-1 * var(--oscillate-distance)))}}";
+const b = ":host{display:block;position:relative}.flag{aspect-ratio:1;isolation:isolate;--lightningcss-light:initial;--lightningcss-dark: ;--lightningcss-light:initial;--lightningcss-dark: ;color-scheme:light only;forced-color-adjust:none;display:flex}.flag.no-animation .column{animation:none}.column{animation:oscillate var(--animation-speed) infinite alternate ease-in-out backwards;filter:none!important}@keyframes oscillate{0%{transform:translateY(var(--oscillate-distance))}to{transform:translateY(calc(-1 * var(--oscillate-distance)))}}";
 class S extends HTMLElement {
   constructor() {
     super(), this.attachShadow({ mode: "open" }), this._mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -52,7 +52,7 @@ class S extends HTMLElement {
     return this.animationSpeed !== void 0 ? this.animationSpeed : this.effectiveReduceAnimation ? 900 : 600;
   }
   get activeOscillateDistance() {
-    return this.oscillateDistance !== void 0 ? this.oscillateDistance : this.effectiveReduceAnimation ? "3%" : "2%";
+    return this.oscillateDistance !== void 0 ? this.oscillateDistance : "2%";
   }
   get columnStructures() {
     const e = this.gridSize, c = [], d = 32;

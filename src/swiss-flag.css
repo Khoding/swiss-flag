@@ -16,7 +16,6 @@
 }
 
 .column {
-  flex: 1;
   animation: oscillate var(--animation-speed) infinite alternate ease-in-out
     backwards;
   filter: none !important;
