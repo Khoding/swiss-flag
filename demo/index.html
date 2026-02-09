@@ -284,6 +284,40 @@
           </div>
         </div>
       </div>
+
+      <div class="manual-settings-section">
+        <label style="margin-bottom: 1rem; font-weight: 500;">
+          <input type="checkbox" id="override-reduced">
+          Override Reduced Settings
+        </label>
+
+        <div id="reduced-preset-message" class="preset-message">
+          Using "Reduced" defaults (900ms speed, 2% distance, 0ms stagger)
+        </div>
+
+        <div id="reduced-manual-controls" class="manual-controls" style="opacity: 0.5;">
+          <div>
+            <div class="manual-label-header">
+              Reduced Speed <span id="reduced-speed-display" class="manual-value">900ms</span>
+            </div>
+            <input type="range" id="reduced-speed-slider" min="100" max="3000" step="50" value="900" disabled>
+          </div>
+
+          <div>
+            <div class="manual-label-header">
+              Reduced Distance <span id="reduced-distance-display" class="manual-value">2%</span>
+            </div>
+            <input type="range" id="reduced-distance-slider" min="0" max="10" step="0.1" value="2" disabled>
+          </div>
+
+          <div>
+            <div class="manual-label-header">
+              Reduced Stagger <span id="reduced-stagger-display" class="manual-value">0ms</span>
+            </div>
+            <input type="range" id="reduced-stagger-slider" min="0" max="200" step="5" value="0" disabled>
+          </div>
+        </div>
+      </div>
     </div>
 
     <swiss-flag style="inline-size: 12rem;">
@@ -341,7 +375,11 @@
       overrideAnimation: false,
       speed: 600,
       distance: 2,
-      stagger: 50
+      stagger: 50,
+      overrideReduced: false,
+      reducedSpeed: 900,
+      reducedDistance: 2,
+      reducedStagger: 0
     };
 
     const reduceMotionCheckbox = document.getElementById('reduce-motion');
@@ -358,6 +396,17 @@
     const distanceDisplay = document.getElementById('distance-display');
     const staggerSlider = document.getElementById('stagger-slider');
     const staggerDisplay = document.getElementById('stagger-display');
+
+    const overrideReducedCheckbox = document.getElementById('override-reduced');
+    const reducedManualControls = document.getElementById('reduced-manual-controls');
+    const reducedPresetMessage = document.getElementById('reduced-preset-message');
+    const reducedSpeedSlider = document.getElementById('reduced-speed-slider');
+    const reducedSpeedDisplay = document.getElementById('reduced-speed-display');
+    const reducedDistanceSlider = document.getElementById('reduced-distance-slider');
+    const reducedDistanceDisplay = document.getElementById('reduced-distance-display');
+    const reducedStaggerSlider = document.getElementById('reduced-stagger-slider');
+    const reducedStaggerDisplay = document.getElementById('reduced-stagger-display');
+
     const swissFlag = document.querySelector('swiss-flag');
     const credits = document.createElement('div');
     credits.className = 'credits';
@@ -382,6 +431,12 @@
         attributes.push(highlightAttr('animation-speed', state.speed));
         attributes.push(highlightAttr('oscillate-distance', `${state.distance}%`));
         attributes.push(highlightAttr('staggered-delay', state.stagger));
+      }
+
+      if (state.overrideReduced) {
+        attributes.push(highlightAttr('reduced-animation-speed', state.reducedSpeed));
+        attributes.push(highlightAttr('reduced-oscillate-distance', `${state.reducedDistance}%`));
+        attributes.push(highlightAttr('reduced-staggered-delay', state.reducedStagger));
       }
 
       const attrString = attributes.length > 0 ? ' ' + attributes.join('\n  ') : '';
@@ -440,23 +495,43 @@
         staggerSlider.disabled = true;
         manualControls.style.opacity = '0.5';
 
-        if (state.reduceAnimation) {
-          state.speed = 900;
-          state.distance = 2;
-          state.stagger = 35;
-        } else {
-          state.speed = 600;
-          state.distance = 2;
-          state.stagger = 50;
-        }
+        // Reset to Standard defaults
+        state.speed = 600;
+        state.distance = 2;
+        state.stagger = 50;
 
         speedSlider.value = state.speed;
         distanceSlider.value = state.distance;
         staggerSlider.value = state.stagger;
+      }
 
-        presetMessage.textContent = state.reduceAnimation
-          ? 'Using "Reduced Motion" preset (900ms speed, 2% distance, 35ms stagger)'
-          : 'Using "Standard" preset (600ms speed, 2% distance, 50ms stagger)';
+      if (state.overrideReduced) {
+        swissFlag.setAttribute('reduced-animation-speed', state.reducedSpeed);
+        swissFlag.setAttribute('reduced-oscillate-distance', state.reducedDistance + '%');
+        swissFlag.setAttribute('reduced-staggered-delay', state.reducedStagger);
+
+        reducedSpeedSlider.disabled = false;
+        reducedDistanceSlider.disabled = false;
+        reducedStaggerSlider.disabled = false;
+        reducedManualControls.style.opacity = '1';
+      } else {
+        swissFlag.removeAttribute('reduced-animation-speed');
+        swissFlag.removeAttribute('reduced-oscillate-distance');
+        swissFlag.removeAttribute('reduced-staggered-delay');
+
+        reducedSpeedSlider.disabled = true;
+        reducedDistanceSlider.disabled = true;
+        reducedStaggerSlider.disabled = true;
+        reducedManualControls.style.opacity = '0.5';
+
+        // Reset to Reduced defaults
+        state.reducedSpeed = 900;
+        state.reducedDistance = 2;
+        state.reducedStagger = 35;
+
+        reducedSpeedSlider.value = state.reducedSpeed;
+        reducedDistanceSlider.value = state.reducedDistance;
+        reducedStaggerSlider.value = state.reducedStagger;
       }
 
       swissFlag.style.inlineSize = `${state.size}rem`;
@@ -465,6 +540,13 @@
       speedDisplay.textContent = `${state.speed}ms`;
       distanceDisplay.textContent = `${state.distance}%`;
       staggerDisplay.textContent = `${state.stagger}ms`;
+
+      reducedSpeedDisplay.textContent = `${state.reducedSpeed}ms`;
+      reducedDistanceDisplay.textContent = `${state.reducedDistance}%`;
+      reducedStaggerDisplay.textContent = `${state.reducedStagger}ms`;
+
+      presetMessage.textContent = 'Using "Standard" defaults (600ms speed, 2% distance, 50ms stagger)';
+      reducedPresetMessage.textContent = 'Using "Reduced" defaults (900ms speed, 2% distance, 35ms stagger)';
 
       if (state.showSlot) {
         if (!swissFlag.contains(credits)) {
@@ -510,17 +592,6 @@
 
     overrideCheckbox.addEventListener('change', (e) => {
       state.overrideAnimation = e.target.checked;
-
-      if (state.overrideAnimation && state.reduceAnimation) {
-        state.speed = 900;
-        state.distance = 2;
-        state.stagger = 35;
-
-        speedSlider.value = state.speed;
-        distanceSlider.value = state.distance;
-        staggerSlider.value = state.stagger;
-      }
-
       updateUI();
     });
 
@@ -536,6 +607,26 @@
 
     staggerSlider.addEventListener('input', (e) => {
       state.stagger = Number(e.target.value);
+      updateUI();
+    });
+
+    overrideReducedCheckbox.addEventListener('change', (e) => {
+      state.overrideReduced = e.target.checked;
+      updateUI();
+    });
+
+    reducedSpeedSlider.addEventListener('input', (e) => {
+      state.reducedSpeed = Number(e.target.value);
+      updateUI();
+    });
+
+    reducedDistanceSlider.addEventListener('input', (e) => {
+      state.reducedDistance = Number(e.target.value);
+      updateUI();
+    });
+
+    reducedStaggerSlider.addEventListener('input', (e) => {
+      state.reducedStagger = Number(e.target.value);
       updateUI();
     });
 

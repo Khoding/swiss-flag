@@ -10,10 +10,13 @@ export class SwissFlag extends HTMLElement {
   static get observedAttributes() {
     return [
       'reduce-animation',
+      'remove-animation',
       'animation-speed',
       'oscillate-distance',
       'staggered-delay',
-      'remove-animation'
+      'reduced-animation-speed',
+      'reduced-oscillate-distance',
+      'reduced-staggered-delay'
     ];
   }
 
@@ -53,6 +56,21 @@ export class SwissFlag extends HTMLElement {
     return val ? Number(val) : undefined;
   }
 
+  get reducedAnimationSpeed() {
+    const val = this.getAttribute('reduced-animation-speed');
+    return val ? Number(val) : undefined;
+  }
+
+  get reducedOscillateDistance() {
+    const val = this.getAttribute('reduced-oscillate-distance');
+    return val === null ? undefined : val;
+  }
+
+  get reducedStaggeredDelay() {
+    const val = this.getAttribute('reduced-staggered-delay');
+    return val ? Number(val) : undefined;
+  }
+
   get effectiveReduceAnimation() {
     return this.reduceAnimation || this._mediaQuery.matches;
   }
@@ -63,19 +81,31 @@ export class SwissFlag extends HTMLElement {
     return 15;
   }
 
-  get activeStaggeredDelay() {
-    if (this.staggeredDelay !== undefined) return this.staggeredDelay;
-    return !this.effectiveReduceAnimation ? 50 : 35;
-  }
-
   get activeAnimationSpeed() {
-    if (this.animationSpeed !== undefined) return this.animationSpeed;
-    return !this.effectiveReduceAnimation ? 600 : 900;
+    if (this.effectiveReduceAnimation) {
+      return this.reducedAnimationSpeed !== undefined
+        ? this.reducedAnimationSpeed
+        : 900;
+    }
+    return this.animationSpeed !== undefined ? this.animationSpeed : 600;
   }
 
   get activeOscillateDistance() {
-    if (this.oscillateDistance !== undefined) return this.oscillateDistance;
-    return '2%';
+    if (this.effectiveReduceAnimation) {
+      return this.reducedOscillateDistance !== undefined
+        ? this.reducedOscillateDistance
+        : '2%';
+    }
+    return this.oscillateDistance !== undefined ? this.oscillateDistance : '2%';
+  }
+
+  get activeStaggeredDelay() {
+    if (this.effectiveReduceAnimation) {
+      return this.reducedStaggeredDelay !== undefined
+        ? this.reducedStaggeredDelay
+        : 35;
+    }
+    return this.staggeredDelay !== undefined ? this.staggeredDelay : 50;
   }
 
   get columnStructures() {

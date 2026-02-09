@@ -41,6 +41,9 @@ Import the swiss-flag component into your Vue application and use it in your tem
       animation-speed="1000"
       oscillate-distance="5%"
       staggered-delay="100"
+      reduced-animation-speed="1500"
+      reduced-oscillate-distance="3%"
+      reduced-staggered-delay="70"
     />
   </div>
 </template>
@@ -56,9 +59,21 @@ import '@khoding/swiss-flag';
 | --- | --- | --- | --- |
 | `reduce-animation` | Boolean | `false` | When true, forces the simplified variant of the flag (fewer columns, slower animation). Automatically enabled if user prefers reduced motion. |
 | `remove-animation` | Boolean | `false` | When true, disables the waving animation completely and renders a static 5-column flag for performance. |
-| `animation-speed` | Number | `600` / `900` | (Optional) Duration of the oscillation cycle in milliseconds. Defaults to 600ms (Standard) or 900ms (Reduced Motion). |
-| `oscillate-distance` | String | `'2%'` / `'3%'` | (Optional) CSS value for the vertical displacement distance. Defaults to '2%' (Standard) or '3%' (Reduced Motion). |
-| `staggered-delay` | Number | `50` / `35` | (Optional) Delay in milliseconds between each column's animation start. Defaults to 50ms (Standard) or 35ms (Reduced Motion). |
+| `animation-speed` | Number | `600` | (Optional) Duration of the oscillation cycle in milliseconds. Defaults to 600ms. |
+| `oscillate-distance` | String | `'2%'` | (Optional) CSS value for the vertical displacement distance. |
+| `staggered-delay` | Number | `50` | (Optional) Delay in milliseconds between each column's animation start. Defaults to 50ms. |
+| `reduced-animation-speed` | Number | `900` | (Optional) Animation speed when reduced motion is active. Defaults to 900ms. |
+| `reduced-oscillate-distance` | String | `'2%'` | (Optional) Oscillation distance when reduced motion is active. |
+| `reduced-staggered-delay` | Number | `35` | (Optional) Stagger delay when reduced motion is active. Defaults to 35ms. |
+
+### Reduced Motion Configuration
+
+The component automatically respects the user's `prefers-reduced-motion` system setting. When active (or when `reduce-animation` is set to true), the component switches to "reduced" defaults which are slower and gentler to avoid triggering motion sickness.
+
+If you choose to override the reduced motion defaults, please keep the following in mind:
+
+1.  **Motion Sickness**: The default reduced values are tuned to be safe for users with vestibular disorders. Changes to these defaults should be made with caution. Usually, it is best to keep the "reduced" values at their defaults and only modify the normal settings.
+2.  **Consistency**: It is highly recommended to keep `oscillate-distance` and `reduced-oscillate-distance` at the same values. If one mode uses `2%` (subtle) and the other uses `50%` (extreme), switching between them or loading the page could cause significant layout shifts or "page breaking" behavior as the component dimensions change. Even a slight change can make a difference, so it really depends on the space you allocate the flag.
 
 ## Slots
 
