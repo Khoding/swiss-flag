@@ -424,10 +424,34 @@
         swissFlag.setAttribute('animation-speed', state.speed);
         swissFlag.setAttribute('oscillate-distance', state.distance + '%');
         swissFlag.setAttribute('staggered-delay', state.stagger);
+
+        speedSlider.disabled = false;
+        distanceSlider.disabled = false;
+        staggerSlider.disabled = false;
+        manualControls.style.opacity = '1';
       } else {
         swissFlag.removeAttribute('animation-speed');
         swissFlag.removeAttribute('oscillate-distance');
         swissFlag.removeAttribute('staggered-delay');
+
+        speedSlider.disabled = true;
+        distanceSlider.disabled = true;
+        staggerSlider.disabled = true;
+        manualControls.style.opacity = '0.5';
+
+        if (state.reduceAnimation) {
+          state.speed = 900;
+          state.distance = 2;
+          state.stagger = 35;
+        } else {
+          state.speed = 600;
+          state.distance = 2;
+          state.stagger = 50;
+        }
+
+        speedSlider.value = state.speed;
+        distanceSlider.value = state.distance;
+        staggerSlider.value = state.stagger;
 
         presetMessage.textContent = state.reduceAnimation
           ? 'Using "Reduced Motion" preset (900ms speed, 2% distance, 35ms stagger)'
