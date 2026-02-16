@@ -102,8 +102,8 @@ export class SwissFlag extends HTMLElement {
     return this.staggeredDelay !== undefined ? this.staggeredDelay : 50;
   }
 
-  getColumnStructures(sizeOverride) {
-    const size = sizeOverride !== undefined ? sizeOverride : this.gridSize;
+  get columnStructures() {
+    const size = this.gridSize;
     const columns = [];
     const TOTAL_HEIGHT_UNITS = 32;
 
@@ -179,7 +179,7 @@ export class SwissFlag extends HTMLElement {
     this.style.setProperty('--oscillate-distance', this.activeOscillateDistance);
     this.style.setProperty('--animation-speed', `${this.activeAnimationSpeed}ms`);
 
-    const structures = this.getColumnStructures();
+    const structures = this.columnStructures;
     const staggered = this.activeStaggeredDelay;
     const size = this.gridSize;
 
@@ -200,29 +200,9 @@ export class SwissFlag extends HTMLElement {
       })
       .join('');
 
-    const staticStructures = this.getColumnStructures(5);
-    const staticColumnsHtml = staticStructures
-      .map(col => {
-        const styles = [
-          `flex:${col.width}`,
-          col.singleColor ? `background-color:${col.singleColor}` : '',
-          col.background ? `background:${col.background}` : '',
-        ]
-          .filter(Boolean)
-          .join(';');
-
-        return `<div class="column" style="${styles}"></div>`;
-      })
-      .join('');
-
-    const noAnim = this.removeAnimation;
-    const flagClasses = `flag${
+    this.shadowRoot.innerHTML = `<style>${styles}</style><section class="flag${
       this.effectiveReduceAnimation ? ' reduced-motion' : ''
-    }${noAnim ? ' no-animation' : ''}`;
-
-    this.shadowRoot.innerHTML = `<style>${styles}</style><div class="flag-container">${
-      noAnim ? '' : `<section class="static-flag">${staticColumnsHtml}</section>`
-    }<section class="${flagClasses}">${columnsHtml}</section></div><slot></slot>`;
+    }${this.removeAnimation ? ' no-animation' : ''}">${columnsHtml}</section><slot></slot>`;
   }
 }
 

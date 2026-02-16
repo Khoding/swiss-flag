@@ -87,11 +87,3 @@ The component is designed to let you do whatever you want and doesn't assume any
   </div>
 </swiss-flag>
 ```
-
-## The "Static Flag" Technique
-
-Josh Comeau's original component calculates an optimal flag size to ensure columns align perfectly with screen pixels, preventing subpixel gaps (thin white lines) from appearing. While effective, this technique restricts the flag to specific dimensions divisible by the column count.
-
-To maintain full flexibility over the flag's dimensions, this implementation uses a **Static Flag Background™**. A static version of the flag is rendered directly behind the waving columns. While subpixel gaps may still occasionally occur on some screens and in some situations, the background flag ensures that most of the visible gaps show the flag's colors instead of the underlying page background.
-
-This approach provides the best of both worlds: granular control over the flag's size and a seamless visual experience across different displays. It's not perfect, and it makes the flag slightly less performant, but really not in a damaging way.

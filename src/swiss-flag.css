@@ -3,31 +3,12 @@
   position: relative;
 }
 
-.flag-container {
-  position: relative;
+.flag {
+  display: flex;
   aspect-ratio: 1 / 1;
   isolation: isolate;
   forced-color-adjust: none;
   color-scheme: only light;
-}
-
-.static-flag {
-  display: flex;
-  position: absolute;
-  top: var(--oscillate-distance);
-  right: 0;
-  bottom: var(--oscillate-distance);
-  left: 0;
-}
-
-.static-flag .column {
-  animation: none;
-}
-
-.flag {
-  display: flex;
-  position: relative;
-  block-size: 100%;
 }
 
 .flag.no-animation .column {

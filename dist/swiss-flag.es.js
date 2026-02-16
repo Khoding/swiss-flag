@@ -1,5 +1,5 @@
-const S = ":host{display:block;position:relative}.flag-container{aspect-ratio:1;isolation:isolate;forced-color-adjust:none;--lightningcss-light:initial;--lightningcss-dark: ;--lightningcss-light:initial;--lightningcss-dark: ;color-scheme:light only;position:relative}.static-flag{top:var(--oscillate-distance);right:0;bottom:var(--oscillate-distance);display:flex;position:absolute;left:0}.static-flag .column{animation:none}.flag{block-size:100%;display:flex;position:relative}.flag.no-animation .column{animation:none}.column{animation:oscillate var(--animation-speed) infinite alternate ease-in-out backwards;filter:none!important}@keyframes oscillate{0%{transform:translateY(var(--oscillate-distance))}to{transform:translateY(calc(-1 * var(--oscillate-distance)))}}";
-class $ extends HTMLElement {
+const b = ":host{display:block;position:relative}.flag{aspect-ratio:1;isolation:isolate;forced-color-adjust:none;--lightningcss-light:initial;--lightningcss-dark: ;--lightningcss-light:initial;--lightningcss-dark: ;color-scheme:light only;display:flex}.flag.no-animation .column{animation:none}.column{animation:oscillate var(--animation-speed) infinite alternate ease-in-out backwards;filter:none!important}@keyframes oscillate{0%{transform:translateY(var(--oscillate-distance))}to{transform:translateY(calc(-1 * var(--oscillate-distance)))}}";
+class S extends HTMLElement {
   constructor() {
     super(), this.attachShadow({ mode: "open" }), this._mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   }
@@ -69,52 +69,48 @@ class $ extends HTMLElement {
   get activeStaggeredDelay() {
     return this.effectiveReduceAnimation ? this.reducedStaggeredDelay !== void 0 ? this.reducedStaggeredDelay : 35 : this.staggeredDelay !== void 0 ? this.staggeredDelay : 50;
   }
-  getColumnStructures(e) {
-    const a = e !== void 0 ? e : this.gridSize, g = [], m = 32;
-    let l, r, s, o;
-    a === 32 ? (l = [6, 25], r = [13, 18], s = [13, 18], o = [6, 25]) : a === 15 ? (l = [3, 11], r = [6, 8], s = [6, 8], o = [3, 11]) : (l = [1, 3], r = [2, 2], s = [2, 2], o = [1, 3]);
-    const t = (i) => {
-      if (a === 32) return 1;
-      if (a === 5) return i === 1 || i === 3 ? 7 : 6;
-      const n = Math.floor(i / 3);
+  get columnStructures() {
+    const e = this.gridSize, c = [], l = 32;
+    let a, i, s, r;
+    e === 32 ? (a = [6, 25], i = [13, 18], s = [13, 18], r = [6, 25]) : e === 15 ? (a = [3, 11], i = [6, 8], s = [6, 8], r = [3, 11]) : (a = [1, 3], i = [2, 2], s = [2, 2], r = [1, 3]);
+    const u = (t) => {
+      if (e === 32) return 1;
+      if (e === 5) return t === 1 || t === 3 ? 7 : 6;
+      const n = Math.floor(t / 3);
       return n === 1 || n === 3 ? 7 / 3 : 2;
-    }, d = (i, n) => {
-      let c = 0;
-      for (let u = i; u < n; u++)
-        c += t(u);
-      return c;
+    }, g = (t, n) => {
+      let o = 0;
+      for (let d = t; d < n; d++)
+        o += u(d);
+      return o;
     };
-    for (let i = 0; i < a; i++) {
-      let n = -1, c = -1;
-      const u = i >= s[0] && i <= s[1], b = i >= l[0] && i <= l[1];
-      u ? (n = o[0], c = o[1]) : b && (n = r[0], c = r[1]);
-      let h = null, f = null;
+    for (let t = 0; t < e; t++) {
+      let n = -1, o = -1;
+      const d = t >= s[0] && t <= s[1], p = t >= a[0] && t <= a[1];
+      d ? (n = r[0], o = r[1]) : p && (n = i[0], o = i[1]);
+      let h = null, m = null;
       if (n === -1)
-        f = "red !important";
+        m = "red !important";
       else {
-        const v = d(0, n), A = d(n, c + 1), p = v / m * 100, y = (v + A) / m * 100;
-        h = `linear-gradient(to bottom, #ff0000 0% ${p}%, #ffffff ${p}% ${y}%, #ff0000 ${y}% 100%) !important`;
+        const f = g(0, n), A = g(n, o + 1), v = f / l * 100, y = (f + A) / l * 100;
+        h = `linear-gradient(to bottom, #ff0000 0% ${v}%, #ffffff ${v}% ${y}%, #ff0000 ${y}% 100%) !important`;
       }
-      g.push({ width: t(i), singleColor: f, background: h });
+      c.push({ width: u(t), singleColor: m, background: h });
     }
-    return g;
+    return c;
   }
   render() {
     this.style.setProperty("--oscillate-distance", this.activeOscillateDistance), this.style.setProperty("--animation-speed", `${this.activeAnimationSpeed}ms`);
-    const e = this.getColumnStructures(), a = this.activeStaggeredDelay, g = this.gridSize, m = e.map((t, d) => `<div class="column" style="${[
-      `animation-delay:${(d - g) * a}ms`,
-      `flex:${t.width}`,
-      t.singleColor ? `background-color:${t.singleColor}` : "",
-      t.background ? `background:${t.background}` : ""
-    ].filter(Boolean).join(";")}"></div>`).join(""), r = this.getColumnStructures(5).map((t) => `<div class="column" style="${[
-      `flex:${t.width}`,
-      t.singleColor ? `background-color:${t.singleColor}` : "",
-      t.background ? `background:${t.background}` : ""
-    ].filter(Boolean).join(";")}"></div>`).join(""), s = this.removeAnimation, o = `flag${this.effectiveReduceAnimation ? " reduced-motion" : ""}${s ? " no-animation" : ""}`;
-    this.shadowRoot.innerHTML = `<style>${S}</style><div class="flag-container">${s ? "" : `<section class="static-flag">${r}</section>`}<section class="${o}">${m}</section></div><slot></slot>`;
+    const e = this.columnStructures, c = this.activeStaggeredDelay, l = this.gridSize, a = e.map((i, s) => `<div class="column" style="${[
+      `animation-delay:${(s - l) * c}ms`,
+      `flex:${i.width}`,
+      i.singleColor ? `background-color:${i.singleColor}` : "",
+      i.background ? `background:${i.background}` : ""
+    ].filter(Boolean).join(";")}"></div>`).join("");
+    this.shadowRoot.innerHTML = `<style>${b}</style><section class="flag${this.effectiveReduceAnimation ? " reduced-motion" : ""}${this.removeAnimation ? " no-animation" : ""}">${a}</section><slot></slot>`;
   }
 }
-customElements.define("swiss-flag", $);
+customElements.define("swiss-flag", S);
 export {
-  $ as SwissFlag
+  S as SwissFlag
 };
