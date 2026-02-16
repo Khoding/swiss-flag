@@ -16,7 +16,7 @@ export class SwissFlag extends HTMLElement {
       'staggered-delay',
       'reduced-animation-speed',
       'reduced-oscillate-distance',
-      'reduced-staggered-delay'
+      'reduced-staggered-delay',
     ];
   }
 
@@ -83,33 +83,27 @@ export class SwissFlag extends HTMLElement {
 
   get activeAnimationSpeed() {
     if (this.effectiveReduceAnimation) {
-      return this.reducedAnimationSpeed !== undefined
-        ? this.reducedAnimationSpeed
-        : 900;
+      return this.reducedAnimationSpeed !== undefined ? this.reducedAnimationSpeed : 900;
     }
     return this.animationSpeed !== undefined ? this.animationSpeed : 600;
   }
 
   get activeOscillateDistance() {
     if (this.effectiveReduceAnimation) {
-      return this.reducedOscillateDistance !== undefined
-        ? this.reducedOscillateDistance
-        : '2%';
+      return this.reducedOscillateDistance !== undefined ? this.reducedOscillateDistance : '2%';
     }
     return this.oscillateDistance !== undefined ? this.oscillateDistance : '2%';
   }
 
   get activeStaggeredDelay() {
     if (this.effectiveReduceAnimation) {
-      return this.reducedStaggeredDelay !== undefined
-        ? this.reducedStaggeredDelay
-        : 35;
+      return this.reducedStaggeredDelay !== undefined ? this.reducedStaggeredDelay : 35;
     }
     return this.staggeredDelay !== undefined ? this.staggeredDelay : 50;
   }
 
-  get columnStructures() {
-    const size = this.gridSize;
+  getColumnStructures(sizeOverride) {
+    const size = sizeOverride !== undefined ? sizeOverride : this.gridSize;
     const columns = [];
     const TOTAL_HEIGHT_UNITS = 32;
 
@@ -169,13 +163,9 @@ export class SwissFlag extends HTMLElement {
         singleColor = 'red !important';
       } else {
         const topRedHeight = calculateHeightWeight(0, whiteStripeStart);
-        const whiteHeight = calculateHeightWeight(
-          whiteStripeStart,
-          whiteStripeEnd + 1
-        );
+        const whiteHeight = calculateHeightWeight(whiteStripeStart, whiteStripeEnd + 1);
         const whiteStartPercent = (topRedHeight / TOTAL_HEIGHT_UNITS) * 100;
-        const whiteEndPercent =
-          ((topRedHeight + whiteHeight) / TOTAL_HEIGHT_UNITS) * 100;
+        const whiteEndPercent = ((topRedHeight + whiteHeight) / TOTAL_HEIGHT_UNITS) * 100;
 
         background = `linear-gradient(to bottom, #ff0000 0% ${whiteStartPercent}%, #ffffff ${whiteStartPercent}% ${whiteEndPercent}%, #ff0000 ${whiteEndPercent}% 100%) !important`;
       }
@@ -186,16 +176,10 @@ export class SwissFlag extends HTMLElement {
   }
 
   render() {
-    this.style.setProperty(
-      '--oscillate-distance',
-      this.activeOscillateDistance
-    );
-    this.style.setProperty(
-      '--animation-speed',
-      `${this.activeAnimationSpeed}ms`
-    );
+    this.style.setProperty('--oscillate-distance', this.activeOscillateDistance);
+    this.style.setProperty('--animation-speed', `${this.activeAnimationSpeed}ms`);
 
-    const structures = this.columnStructures;
+    const structures = this.getColumnStructures();
     const staggered = this.activeStaggeredDelay;
     const size = this.gridSize;
 
@@ -207,7 +191,7 @@ export class SwissFlag extends HTMLElement {
           `animation-delay:${delay}ms`,
           `flex:${col.width}`,
           col.singleColor ? `background-color:${col.singleColor}` : '',
-          col.background ? `background:${col.background}` : ''
+          col.background ? `background:${col.background}` : '',
         ]
           .filter(Boolean)
           .join(';');
@@ -216,9 +200,29 @@ export class SwissFlag extends HTMLElement {
       })
       .join('');
 
-    this.shadowRoot.innerHTML = `<style>${styles}</style><section class="flag${
+    const staticStructures = this.getColumnStructures(5);
+    const staticColumnsHtml = staticStructures
+      .map(col => {
+        const styles = [
+          `flex:${col.width}`,
+          col.singleColor ? `background-color:${col.singleColor}` : '',
+          col.background ? `background:${col.background}` : '',
+        ]
+          .filter(Boolean)
+          .join(';');
+
+        return `<div class="column" style="${styles}"></div>`;
+      })
+      .join('');
+
+    const noAnim = this.removeAnimation;
+    const flagClasses = `flag${
       this.effectiveReduceAnimation ? ' reduced-motion' : ''
-    }${this.removeAnimation ? ' no-animation' : ''}">${columnsHtml}</section><slot></slot>`;
+    }${noAnim ? ' no-animation' : ''}`;
+
+    this.shadowRoot.innerHTML = `<style>${styles}</style><div class="flag-container">${
+      noAnim ? '' : `<section class="static-flag">${staticColumnsHtml}</section>`
+    }<section class="${flagClasses}">${columnsHtml}</section></div><slot></slot>`;
   }
 }
 

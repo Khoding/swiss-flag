@@ -3,12 +3,31 @@
   position: relative;
 }
 
-.flag {
-  display: flex;
+.flag-container {
+  position: relative;
   aspect-ratio: 1 / 1;
   isolation: isolate;
-  color-scheme: only light;
   forced-color-adjust: none;
+  color-scheme: only light;
+}
+
+.static-flag {
+  display: flex;
+  position: absolute;
+  top: var(--oscillate-distance);
+  right: 0;
+  bottom: var(--oscillate-distance);
+  left: 0;
+}
+
+.static-flag .column {
+  animation: none;
+}
+
+.flag {
+  display: flex;
+  position: relative;
+  block-size: 100%;
 }
 
 .flag.no-animation .column {
@@ -16,8 +35,7 @@
 }
 
 .column {
-  animation: oscillate var(--animation-speed) infinite alternate ease-in-out
-    backwards;
+  animation: oscillate var(--animation-speed) infinite alternate ease-in-out backwards;
   filter: none !important;
 }
 
